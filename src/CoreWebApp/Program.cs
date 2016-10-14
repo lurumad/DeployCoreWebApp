@@ -11,21 +11,13 @@ namespace CoreWebApp
     {
         public static void Main(string[] args)
         {
-            var hostBuilder = new WebHostBuilder()
-            .UseKestrel()
-            .UseIISIntegration()
-            .UseStartup<Startup>();
-
-            // ConfigureServices is only used to delay execution until UseIISIntegration()
-            // has actually set the "urls" setting.
-            hostBuilder.ConfigureServices(services =>
-            {
-                var urls = hostBuilder.GetSetting("urls");
-                urls = urls.Replace("localhost", "127.0.0.1");
-                hostBuilder.UseSetting("urls", urls);
-            });
-
-            var host = hostBuilder.Build();
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseUrls("http://127.0.0.0:5000")
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
 
             host.Run();
         }
